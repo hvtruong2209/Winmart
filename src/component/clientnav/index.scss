@@ -1,0 +1,28 @@
+.clientnav {
+  background-color: #ed1c24;
+  display: flex;
+  justify-content: center;
+}
+.main-container {
+  width: 1220px;
+  display: flex;
+  padding: 10px 60px;
+  align-items: center;
+  justify-content: space-between;
+  > div {
+    width: 120px;
+  }
+  .search-input {
+    align-items: center;
+    border-radius: 20px;
+    padding: 0px 10px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 400px;
+    color: rgb(51, 51, 51);
+    background-color: rgb(247, 247, 247);
+    border: 1px solid rgb(241, 241, 241);
+    outline: none;
+    height: 40px;
+  }
+}
