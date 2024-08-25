@@ -1,3 +1,9 @@
+import { Home } from "page/client/home";
+
 export const HomeClient = () => {
-  return <>Home Client</>;
+  return (
+    <>
+      <Home></Home>
+    </>
+  );
 };

@@ -14,7 +14,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": "src", // Đặt src làm thư mục gốc
+    "paths": {
+      "@assets/*": ["assets/*"] // Alias cho thư mục assets
+    }
   },
   "include": ["src"]
 }
