@@ -1,8 +1,8 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import HouseIcon from "@mui/icons-material/House";
-import logo from "assets/images/logo.svg";
 import { TextInput } from "component/textfield";
 import { ButtonCustom } from "component/button";
+import { getUrlImage } from "Utils";
 
 export const Login = () => {
   return (
@@ -10,7 +10,7 @@ export const Login = () => {
       <div className="container">
         <div className="container-header">
           <ArrowBackIcon style={{ width: 30 }} />
-          <img src={logo} style={{ height: 42 }}></img>
+          <img src={getUrlImage("logo.svg")} style={{ height: 42 }} alt="logo"></img>
           <HouseIcon style={{ width: 30 }} />
         </div>
         <div className="container-body">

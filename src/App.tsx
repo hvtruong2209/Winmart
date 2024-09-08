@@ -2,9 +2,11 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HomeClient } from "./layout/HomeClient";
 import { Register } from "./page/client/register";
+import { ProductDetail } from "./page/client/productdetail";
 import { Login } from "./page/client/login";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Cart } from "page/client/cart";
 function App() {
   return (
     <div className="App">
@@ -14,6 +16,8 @@ function App() {
             <Route path="/" element={<HomeClient></HomeClient>}></Route>
             <Route path="/register" element={<Register></Register>}></Route>
             <Route path="/login" element={<Login></Login>}></Route>
+            <Route path="/products/:id" element={<ProductDetail></ProductDetail>}></Route>
+            <Route path="/cart" element={<Cart></Cart>}></Route>
           </Routes>
         </BrowserRouter>
       </LocalizationProvider>

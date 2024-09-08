@@ -1,0 +1,25 @@
+.cart {
+  display: flex;
+  .cart-left {
+    padding: 20px;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+
+      img {
+        display: inline-block;
+        width: 30px;
+      }
+      .select-number {
+        display: flex;
+      }
+      .number {
+        border-top: 1px solid #ed1c24;
+        border-bottom: 1px solid #ed1c24;
+      }
+    }
+  }
+}

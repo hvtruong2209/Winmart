@@ -1,16 +1,28 @@
 .clientnav {
-  background-color: #ed1c24;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  background-color: #ed1c24;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 100;
 }
 .main-container {
-  width: 1220px;
+  padding: 10px 0px;
   display: flex;
-  padding: 10px 60px;
   align-items: center;
   justify-content: space-between;
-  > div {
+  .nav-cart,
+  .nav-avatar {
     width: 120px;
+    display: flex;
+    align-items: center;
+    span {
+      color: #fff;
+      margin-left: 10px;
+    }
   }
   .search-input {
     align-items: center;
@@ -24,5 +36,29 @@
     border: 1px solid rgb(241, 241, 241);
     outline: none;
     height: 40px;
+  }
+}
+
+.menu-nav {
+  width: 100%;
+  background: #f1f0f1;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wrap-container {
+  width: 1220px;
+  display: flex;
+  justify-content: space-between;
+  .right {
+    display: flex;
+    div {
+      margin-left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
   }
 }

@@ -1,0 +1,1 @@
+export { getUrlImage } from "./Image";
