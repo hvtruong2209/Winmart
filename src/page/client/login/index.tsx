@@ -3,8 +3,10 @@ import HouseIcon from "@mui/icons-material/House";
 import { TextInput } from "component/textfield";
 import { ButtonCustom } from "component/button";
 import { getUrlImage } from "Utils";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
+  const navigate = useNavigate();
   return (
     <div className="register">
       <div className="container">
@@ -18,7 +20,13 @@ export const Login = () => {
           <TextInput id="phone" label="Số điện thoại"></TextInput>
           <TextInput id="password" label="Mật khẩu"></TextInput>
           <ButtonCustom textButton="Đăng nhập"></ButtonCustom>
-          <ButtonCustom textButton="Đăng kí" type="secondary"></ButtonCustom>
+          <ButtonCustom
+            textButton="Đăng kí"
+            type="secondary"
+            onClick={() => {
+              navigate("/register");
+            }}
+          ></ButtonCustom>
         </div>
       </div>
     </div>

@@ -7,7 +7,9 @@ import Radio from "@mui/joy/Radio";
 import RadioGroup from "@mui/joy/RadioGroup";
 import { ButtonCustom } from "component/button";
 import { getUrlImage } from "Utils";
+import { useNavigate } from "react-router-dom";
 export const Register = () => {
+  const navigate = useNavigate();
   return (
     <div className="register">
       <div className="container">
@@ -57,7 +59,13 @@ export const Register = () => {
             />
           </RadioGroup>
           <ButtonCustom textButton="Tiếp tục"></ButtonCustom>
-          <ButtonCustom textButton="Đăng nhập" type="secondary"></ButtonCustom>
+          <ButtonCustom
+            textButton="Đăng nhập"
+            type="secondary"
+            onClick={() => {
+              navigate("/login");
+            }}
+          ></ButtonCustom>
         </div>
       </div>
     </div>

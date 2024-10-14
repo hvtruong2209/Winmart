@@ -11,7 +11,7 @@ export const ButtonCustom = (props: any) => {
         backgroundColor: "white",
         border: "1px solid rgb(237, 28, 36)",
         color: props.colorText || "rgb(237, 28, 36)",
-        fontWeight: 400,
+        fontWeight: props.fontWeight || 400,
         "&:hover": {
           backgroundColor: "white",
           // color: "white",
@@ -29,7 +29,7 @@ export const ButtonCustom = (props: any) => {
         mt: 2,
         backgroundColor: "rgb(237, 28, 36)",
         color: "white",
-        fontWeight: 400,
+        fontWeight: props.fontWeight || 400,
         "&:hover": {
           backgroundColor: "rgb(237, 28, 36)",
           // color: "rgb(237, 28, 36)",

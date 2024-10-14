@@ -17,7 +17,7 @@ const AxiosAPI = (fromData = false, client = false) => {
   //   header.Authorization = `Bearer ${sessionStorage.getItem("token_customer")}`;
   // }
   const instance = axios.create({
-    baseURL: "",
+    baseURL: "https://localhost:44354/api/",
     headers: header,
   });
   return instance;

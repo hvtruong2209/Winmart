@@ -42,7 +42,7 @@
   font-size: 16px;
   font-weight: 600;
   .description {
-    width: 400px;
+    width: 450px;
   }
   .detail {
     flex-grow: 1;
@@ -50,9 +50,10 @@
 }
 .part-detail-product {
   .description {
-    width: 400px;
+    width: 450px;
     padding: 10px;
     text-align: justify;
+    font-size: 13px;
   }
   .detail {
     font-size: 13px;

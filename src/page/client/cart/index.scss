@@ -11,14 +11,60 @@
 
       img {
         display: inline-block;
-        width: 30px;
+        width: 50px;
       }
       .select-number {
         display: flex;
+        border: 1px solid #ed1c24;
+        height: 40px;
+        border-radius: 6px;
+        .MuiButtonBase-root {
+          margin: 0px;
+          border: none;
+        }
       }
       .number {
-        border-top: 1px solid #ed1c24;
-        border-bottom: 1px solid #ed1c24;
+        padding: 0px 20px;
+        line-height: 40px;
+        color: #ed1c24;
+        // border-top: 1px solid #ed1c24;
+        // border-bottom: 1px solid #ed1c24;
+      }
+    }
+    .footer-delete {
+      border-top: 1px solid rgb(247, 247, 247);
+      margin-top: 20px;
+      padding-top: 10px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+  .cart-right {
+    width: 40%;
+    padding: 20px;
+    .text {
+      margin-bottom: 10px;
+      text-shadow: rgba(0, 0, 0, 0.004) 1px 1px 1px;
+      color: rgb(51, 51, 51);
+      font-size: 13px;
+    }
+    .price {
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+    .discount {
+      padding: 10px;
+      border: 1px solid #ed1c24;
+      border-radius: 4px;
+      .MuiButtonBase-root {
+        margin: 0px;
+        border: none;
+      }
+      .discount-text {
+        width: 300px;
+        font-weight: 600;
+        margin-left: 10px;
+        margin-top: 10px;
       }
     }
   }
