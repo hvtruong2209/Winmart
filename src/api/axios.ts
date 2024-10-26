@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const AxiosAPI = (fromData = false, client = false) => {
+const AxiosAPI = (fromData = false, baseURL?: string) => {
   if (fromData) {
     var header = {
       "Content-Type": "multipart/form-data",
@@ -17,7 +17,7 @@ const AxiosAPI = (fromData = false, client = false) => {
   //   header.Authorization = `Bearer ${sessionStorage.getItem("token_customer")}`;
   // }
   const instance = axios.create({
-    baseURL: "https://localhost:44354/api/",
+    baseURL: baseURL || "https://localhost:44361/api/",
     headers: header,
   });
   return instance;

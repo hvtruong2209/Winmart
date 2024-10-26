@@ -90,6 +90,7 @@ export const ClientNav = (props: any) => {
             }}
           >
             <AddShoppingCartIcon style={{ color: "#fff" }} /> <span>Giỏ hàng</span>
+            <div className="number-product">1</div>
           </div>
           <div
             className="nav-avatar"
@@ -113,7 +114,8 @@ export const ClientNav = (props: any) => {
               style={{ color: "#000", fontSize: 13 }}
               onMouseEnter={() => setIsOpenMenu(true)}
             >
-              <DehazeIcon style={{ marginRight: 10 }} /> Danh sách danh mục
+              <DehazeIcon style={{ marginRight: 10 }} />
+              <span>Danh mục sản phẩm</span>
             </Button>
 
             {isOpenMenu && (

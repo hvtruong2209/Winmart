@@ -4,7 +4,7 @@ class Chat {
   service: any;
   uploadService: any;
   constructor() {
-    this.service = AxiosAPI();
+    this.service = AxiosAPI(false, "https://localhost:44360/");
     this.uploadService = AxiosAPI(true);
   }
 
@@ -28,7 +28,7 @@ class Chat {
     }
   };
 
-  sendMessage = async (message: any) => {
+  sendMessage = async (message: { content: string; roomId: number }) => {
     try {
       await this.service.post("/messages", message);
     } catch {}

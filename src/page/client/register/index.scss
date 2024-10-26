@@ -15,4 +15,15 @@
       align-items: center;
     }
   }
+  .text-error {
+    font-size: 12px;
+    color: #ff3e34;
+    margin-top: 4px;
+    margin-left: 4px;
+  }
+  .border-red {
+    .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+      border-color: #ff3e34;
+    }
+  }
 }

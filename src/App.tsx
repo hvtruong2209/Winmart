@@ -9,6 +9,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Cart } from "page/client/cart";
 import { PrivateClient } from "layout/PrivateClient";
 import { ChatClient } from "page/client/chat";
+import { Payment } from "page/client/payment";
+import { InfoAccount } from "page/client/infoaccount";
 function App() {
   return (
     <div className="App">
@@ -20,7 +22,9 @@ function App() {
             <Route path="/" element={<HomeClient />}></Route>
             <Route path="/products/:id" element={<ProductDetail></ProductDetail>}></Route>
             <Route path="/cart" element={<Cart></Cart>}></Route>
+            <Route path="/checkout" element={<Payment></Payment>}></Route>
             <Route path="/chat" element={<ChatClient></ChatClient>}></Route>
+            <Route path="/customer/profile" element={<InfoAccount></InfoAccount>}></Route>
             {/* <Route path="/products/:id" element={<PrivateClient element={<ProductDetail />} />}></Route>
             <Route path="/cart" element={<PrivateClient element={<Cart />} />}></Route> */}
           </Routes>

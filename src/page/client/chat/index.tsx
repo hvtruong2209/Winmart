@@ -3,99 +3,23 @@ import { Footer } from "component/footer";
 import "./index.scss";
 import { getUrlImage } from "Utils";
 import { PlayArrow, Image } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChatService } from "api/Chat";
-const data = [
-  {
-    userId: "12345",
-    name: "Truong",
-    text: "oke la",
-    time: "02:12 01/04/2021",
-    type: "user",
-  },
-  {
-    userId: "12345",
-    name: "Truong",
-    text: "1111111111111111111111",
-    time: "02:12 01/04/2021",
-    type: "system",
-  },
-  {
-    userId: "12345",
-    name: "Truong",
-    text: "2222222222222222222222",
-    time: "02:12 01/04/2021",
-    type: "system",
-  },
-  {
-    userId: "12345",
-    name: "Truong",
-    text: "33333333333333333333333333333",
-    time: "02:12 01/04/2021",
-    type: "user",
-  },
-  {
-    userId: "12345",
-    name: "Truong",
-    text: "oke la",
-    time: "02:12 01/04/2021",
-    type: "user",
-  },
-  {
-    userId: "12345",
-    text: "1111111111111111111111",
-    name: "Truong",
-    time: "02:12 01/04/2021",
-    type: "system",
-  },
-  {
-    userId: "12345",
-    text: "2222222222222222222222",
-    time: "02:12 01/04/2021",
-    name: "Truong",
-    type: "system",
-  },
-  {
-    userId: "12345",
-    text: "33333333333333333333333333333",
-    time: "02:12 01/04/2021",
-    name: "Truong",
-    type: "user",
-  },
-  {
-    userId: "12345",
-    name: "Truong",
-    text: "oke la",
-    time: "02:12 01/04/2021",
-    type: "user",
-  },
-  {
-    userId: "12345",
-    text: "1111111111111111111111",
-    time: "02:12 01/04/2021",
-    name: "Truong",
-    type: "system",
-  },
-  {
-    userId: "12345",
-    text: "2222222222222222222222",
-    name: "Truong",
-    time: "02:12 01/04/2021",
-    type: "system",
-  },
-  {
-    userId: "12345",
-    text: "33333333333333333333333333333",
-    name: "Truong",
-    time: "02:12 01/04/2021",
-    type: "user",
-  },
-];
+import * as signalR from "@microsoft/signalr";
+import { Message } from "model";
+
 export const ChatClient = () => {
-  const [textState, setTextState] = useState<string>("");
-  const onSendMessage = () => {
-    //handle
-    setTextState("");
+  const listMessage = useRef<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [content, setContent] = useState<string>("");
+  // const userId = localStorage.getItem("userId") || 1;
+
+  const onSendMessage = async () => {
+    await ChatService.sendMessage({
+      content: content,
+      roomId: 1,
+    });
+    setContent("");
   };
 
   const handleFileChange = async (event: any) => {
@@ -104,17 +28,38 @@ export const ChatClient = () => {
     if (!file) return;
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("FileUpload", file);
     await ChatService.upload(formData);
   };
 
-  const initChat = async () => {
-    const res = await ChatService.getRoom();
-    console.log("res", res);
-  };
+  // const initChat = async () => {
+  //   const res = await ChatService.getRoom();
+  //   console.log("res", res);
+  // };
 
   useEffect(() => {
-    initChat();
+    const newConnection = new signalR.HubConnectionBuilder()
+      .withUrl("https://localhost:44354/chatHub")
+      .configureLogging(signalR.LogLevel.Information)
+      .build();
+
+    newConnection
+      .start()
+      .then(() => {
+        console.log("Success connect!");
+      })
+      .catch(() => console.error("Error connect!"));
+
+    newConnection.on("newMessage", (messageView: Message) => {
+      setMessages([...listMessage.current, messageView]);
+      listMessage.current = [...listMessage.current, messageView];
+    });
+
+    return () => {
+      if (newConnection) {
+        newConnection.stop();
+      }
+    };
   }, []);
 
   return (
@@ -123,17 +68,17 @@ export const ChatClient = () => {
       <div className="flex justify-center">
         <div className="chat-client container-wrap flex flex-col bg-white">
           <div className="message-container">
-            {data.map((item, index) => {
-              if (item.type === "system")
+            {messages?.map((item, index) => {
+              if (item.userId === 1)
                 return (
                   <span className="mess-system" key={index}>
                     <img alt="avatar" src={getUrlImage("avataradminchat.jpg")}></img>
                     <div className="text">
                       <div className="info">
                         {/* <span className="name">{item.name}</span> */}
-                        <span>{item.time}</span>
+                        <span>{item.timestamp}</span>
                       </div>
-                      <span className="content">{item.text}</span>
+                      <span className="content">{item.content}</span>
                     </div>
                   </span>
                 );
@@ -141,9 +86,9 @@ export const ChatClient = () => {
                 <div className="mess-client" key={index}>
                   <div className="text">
                     <div className="info">
-                      <span>{item.time}</span>
+                      <span>{item.timestamp}</span>
                     </div>
-                    <span className="content">{item.text}</span>
+                    <span className="content">{item.content}</span>
                   </div>
                 </div>
               );
@@ -151,8 +96,9 @@ export const ChatClient = () => {
           </div>
           <div className="chat-bar">
             <input
+              value={content}
               onChange={(e) => {
-                setTextState(e.target.value);
+                setContent(e.target.value);
               }}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {

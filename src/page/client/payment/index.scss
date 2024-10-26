@@ -1,0 +1,117 @@
+.payment {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .info {
+    padding: 30px 20px;
+    margin-bottom: 20px;
+    label {
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 14px;
+    }
+    .info-row {
+      display: flex;
+      width: 100%;
+      padding: 10px 0px;
+      .left {
+        width: 300px;
+      }
+      .right {
+        flex: 1;
+        margin-top: 0px;
+      }
+    }
+  }
+  .time-ship {
+    padding: 30px 20px;
+    margin-bottom: 20px;
+
+    label {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+    .time-ship-box {
+      display: flex;
+      margin-top: 10px;
+      .date {
+        margin-right: 8px;
+        max-width: 90px;
+        text-align: center;
+        padding: 12px 6px;
+        border: 1px solid rgb(221, 221, 221);
+        font-size: 12px;
+        margin-bottom: 20px;
+      }
+    }
+    .choose-time {
+      display: flex;
+      margin-bottom: 8px;
+      margin-top: 10px;
+      p {
+        width: 80px;
+        font-weight: 600;
+        margin-top: 10px;
+      }
+      .select-time {
+        border: 1px solid rgb(221, 221, 221);
+        padding: 12px 6px;
+        width: 100px;
+        text-align: center;
+        margin-right: 8px;
+        font-size: 12px;
+      }
+    }
+  }
+  .method {
+    padding: 30px 20px;
+    .MuiFormLabel-root {
+      font-size: 16px;
+    }
+    .MuiTypography-root {
+      font-size: 13px;
+    }
+    .MuiFormControlLabel-root {
+      border: 1px solid rgb(221, 221, 221);
+      width: 300px;
+      margin-top: 10px;
+      border-radius: 6px;
+      margin-left: 4px;
+    }
+  }
+  .note {
+    padding: 30px 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    .note-left {
+      margin-top: 20px;
+      font-size: 13px;
+    }
+    .MuiTextField-root {
+      width: 400px;
+    }
+    .MuiInputBase-input {
+      padding: 0px;
+      font-size: 12px;
+    }
+  }
+  .total-payment {
+    padding: 30px 20px;
+    width: 100%;
+    .total-payment-container {
+      width: 50%;
+      float: right;
+      .total-payment-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+        .total-payment-row-right-total {
+          font-size: 24px;
+          color: rgb(237, 28, 36);
+        }
+      }
+    }
+  }
+}
