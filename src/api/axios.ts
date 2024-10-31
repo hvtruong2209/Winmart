@@ -1,18 +1,19 @@
 import axios from "axios";
 
 const AxiosAPI = (fromData = false, baseURL?: string) => {
+  var header: any = {};
   if (fromData) {
-    var header = {
+    header = {
       "Content-Type": "multipart/form-data",
     };
   } else {
-    var header = {
+    header = {
       "Content-Type": "application/json",
     };
   }
-  // if (sessionStorage.getItem("token_admin") != null && !client) {
-  //   header.Authorization = `Bearer ${sessionStorage.getItem("token_admin")}`;
-  // }
+  if (localStorage.getItem("accessToken")) {
+    header.Authorization = `Bearer ${sessionStorage.getItem("accessToken")}`;
+  }
   // if (sessionStorage.getItem("token_customer") != null && client) {
   //   header.Authorization = `Bearer ${sessionStorage.getItem("token_customer")}`;
   // }

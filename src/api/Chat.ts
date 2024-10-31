@@ -2,15 +2,17 @@ import AxiosAPI from "./axios";
 
 class Chat {
   service: any;
+  serviceChat: any;
   uploadService: any;
   constructor() {
-    this.service = AxiosAPI(false, "https://localhost:44360/");
+    this.serviceChat = AxiosAPI(false, "https://localhost:44360/");
+    this.service = AxiosAPI();
     this.uploadService = AxiosAPI(true);
   }
 
   getRoom = async () => {
     try {
-      const response = await this.service.get(`/rooms`);
+      const response = await this.serviceChat.get(`/rooms`);
       return response;
     } catch {
       return [];
@@ -19,7 +21,7 @@ class Chat {
 
   getMessage = async (info: any) => {
     try {
-      const response = await this.service.get(
+      const response = await this.serviceChat.get(
         `/messages/room/getmessagebyroomid/roomId=${info.roomId}/page=${info.page}`
       );
       return response;
@@ -28,15 +30,15 @@ class Chat {
     }
   };
 
-  sendMessage = async (message: { content: string; roomId: number }) => {
+  sendMessage = async (message: { content: string; roomId: string }) => {
     try {
-      await this.service.post("/messages", message);
+      await this.serviceChat.post("/messages", message);
     } catch {}
   };
 
   upload = async (image: any) => {
     try {
-      await this.service.post("/upload", image);
+      await this.uploadService.post("/upload", image);
     } catch {}
   };
 }

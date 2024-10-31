@@ -1,6 +1,6 @@
 import "./index.scss";
-import { Button } from "@mui/material";
-import { useState } from "react";
+import { Button, Menu, MenuItem } from "@mui/material";
+import { useEffect, useState } from "react";
 import { MailOutline, HeadsetMic } from "@mui/icons-material";
 import {
   Dehaze as DehazeIcon,
@@ -9,66 +9,78 @@ import {
 } from "@mui/icons-material";
 import { getUrlImage } from "Utils";
 import { useNavigate } from "react-router-dom";
+import { CategoryService } from "api/Category";
+import { ICategory } from "model";
+import { LoginService } from "api/Login";
+import { useDispatch } from "react-redux";
+import { setIsAuth } from "../../redux/authSlice";
 const options = [
   {
     id: 1,
-    title: "Giá siêu rẻ",
+    name: "Giá siêu rẻ",
   },
   {
     id: 2,
-    title: "Sản phẩm khuyến mãi",
+    name: "Sản phẩm khuyến mãi",
   },
   {
     id: 3,
-    title: "Uư đãi hội viên",
+    name: "Uư đãi hội viên",
   },
   {
     id: 4,
-    title: "Sữa các loại",
+    name: "Sữa các loại",
   },
   {
     id: 5,
-    title: "Hoa quả",
+    name: "Hoa quả",
   },
   {
     id: 6,
-    title: "Rau củ trái cây",
-    subTitle: [
+    name: "Rau củ trái cây",
+    categories: [
       {
-        title: "Rau",
+        name: "Rau",
       },
       {
-        title: "Củ",
+        name: "Củ",
       },
       {
-        title: "Quả",
+        name: "Quả",
       },
     ],
   },
   {
     id: 7,
-    title: "Bánh kẹo",
+    name: "Bánh kẹo",
   },
   {
     id: 8,
-    title: "Đồ uống có cồn",
+    name: "Đồ uống có cồn",
   },
 ];
-export const ClientNav = (props: any) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+export const ClientNav = () => {
+  const navigate = useNavigate();
+  const isAuth = localStorage.getItem("accessToken");
   const [optionsSubmenu, setOptionsSubmenu] = useState<any[]>([]);
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [isOpenProfile, setIsOpenProfile] = useState<boolean>(false);
+  const dispatch = useDispatch();
   const openSubMenu = (isOpen: boolean, item?: any) => {
     if (isOpen) {
-      setOptionsSubmenu(item.subTitle);
+      setOptionsSubmenu(item.categories);
     }
   };
+
+  const getCategories = async () => {
+    const res = await CategoryService.getCategory();
+    setCategories(res.length > 0 ? res : options);
+  };
+
+  useEffect(() => {
+    getCategories();
+  }, []);
 
   return (
     <div className="clientnav">
@@ -94,11 +106,51 @@ export const ClientNav = (props: any) => {
           </div>
           <div
             className="nav-avatar"
+            onMouseEnter={() => {
+              setIsOpenProfile(true);
+            }}
+            onMouseLeave={() => {
+              setIsOpenProfile(false);
+            }}
             onClick={() => {
-              navigate("/login");
+              if (isAuth) navigate("/customer/profile");
+              else navigate("/login");
             }}
           >
-            <AccountCircleIcon style={{ color: "#fff" }} /> <span>Hội viên</span>
+            <div>
+              <AccountCircleIcon style={{ color: "#fff" }} /> <span>Hội viên</span>
+            </div>
+            {isOpenProfile && !!isAuth && (
+              <div className="nav-avatar-menu">
+                <div
+                  className="nav-avatar-menu-item-head"
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                ></div>
+                <div
+                  className="nav-avatar-menu-item"
+                  onClick={() => {
+                    navigate("/customer/profile");
+                  }}
+                >
+                  Thông tin
+                </div>
+                <div
+                  className="nav-avatar-menu-item"
+                  onClick={() => {
+                    LoginService.logout(() => {
+                      dispatch(setIsAuth(false));
+                    });
+                    navigate("/");
+
+                    window.location.reload();
+                  }}
+                >
+                  Đăng xuất
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -107,10 +159,7 @@ export const ClientNav = (props: any) => {
           <div className="container-menu">
             <Button
               id="fade-button"
-              aria-controls={open ? "fade-menu" : undefined}
               aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
               style={{ color: "#000", fontSize: 13 }}
               onMouseEnter={() => setIsOpenMenu(true)}
             >
@@ -120,7 +169,7 @@ export const ClientNav = (props: any) => {
 
             {isOpenMenu && (
               <div className="menu">
-                {options?.map((el, index) => {
+                {categories?.map((el, index) => {
                   return (
                     <div
                       key={index}
@@ -128,8 +177,8 @@ export const ClientNav = (props: any) => {
                       onMouseEnter={() => openSubMenu(true, el)}
                       onMouseLeave={() => openSubMenu(false)}
                     >
-                      <div>{el.title}</div>
-                      {el?.subTitle && el?.subTitle?.length > 0 && <div style={{ fontSize: 12 }}>{`>`}</div>}
+                      <div>{el.name}</div>
+                      {el?.categories && el?.categories?.length > 0 && <div style={{ fontSize: 12 }}>{`>`}</div>}
                     </div>
                   );
                 })}
@@ -140,7 +189,7 @@ export const ClientNav = (props: any) => {
                 {optionsSubmenu?.map((el, index) => {
                   return (
                     <div key={index} className="flex justify-between menu-item">
-                      <div>{el?.title}</div>
+                      <div>{el?.name}</div>
                     </div>
                   );
                 })}

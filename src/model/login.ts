@@ -6,6 +6,6 @@ export interface IRegisterUser {
   confirmPassword: string;
 }
 export interface ILoginUser {
-  Email: string;
-  Password: string;
+  email: string;
+  password: string;
 }

@@ -1,5 +1,6 @@
 import { ILoginUser, IRegisterUser } from "model";
 import AxiosAPI from "./axios";
+import { decodeJWT } from "Utils";
 
 class Login {
   service: any;
@@ -8,12 +9,20 @@ class Login {
     this.service = AxiosAPI();
   }
 
-  login = async (user: ILoginUser) => {
+  login = async (user: ILoginUser, callback: any) => {
     try {
       const response = await this.service.post(`/auth/login`, user);
-      return response.data;
+      const token = response.data;
+      const decoded = decodeJWT(token);
+      localStorage.setItem("profile", JSON.stringify(decoded));
+      localStorage.setItem("roomId", decoded.RoomId);
+      localStorage.setItem("userId", decoded.Id);
+      localStorage.setItem("isAuth", JSON.stringify(true));
+      localStorage.setItem("accessToken", token);
+      callback && callback(decoded);
+      return true;
     } catch {
-      return [];
+      return false;
     }
   };
 
@@ -21,9 +30,22 @@ class Login {
     try {
       const response = await this.service.post(`/auth/register`, user);
       return response.data;
-    } catch {
-      return [];
+    } catch (e: any) {
+      return e.response.data;
     }
+  };
+
+  logout = (callback: any) => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("profile");
+    localStorage.removeItem("isAuth");
+    localStorage.removeItem("roomId");
+    localStorage.removeItem("userId");
+    callback && callback();
+  };
+
+  loginGoogle = () => {
+    return "https://localhost:44361/api/Auth/loginGoogle";
   };
 }
 

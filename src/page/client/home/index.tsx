@@ -35,7 +35,6 @@ export const Home = () => {
   const [timeRemaining, setTimeRemaining] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    // Hàm tính toán thời gian còn lại đến cuối ngày
     const calculateTimeRemaining = () => {
       const now = new Date();
       const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);

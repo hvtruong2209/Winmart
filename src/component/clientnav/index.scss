@@ -54,6 +54,27 @@
       }
     }
   }
+  .nav-avatar {
+    flex-direction: column;
+    position: relative;
+    .nav-avatar-menu {
+      position: absolute;
+      right: 18px;
+      width: 120px;
+      font-size: 13px;
+      .nav-avatar-menu-item-head {
+        height: 30px;
+        background-color: transparent;
+      }
+      .nav-avatar-menu-item {
+        background-color: #f8f9fa;
+        padding: 10px;
+        &:hover {
+          color: #ed1c24;
+        }
+      }
+    }
+  }
   .search-input {
     align-items: center;
     border-radius: 20px;

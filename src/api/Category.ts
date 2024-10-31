@@ -1,4 +1,3 @@
-import { ILoginUser, IRegisterUser } from "model";
 import AxiosAPI from "./axios";
 
 class Category {
@@ -10,8 +9,8 @@ class Category {
 
   getCategory = async () => {
     try {
-      const response = await this.service.get(`/categories`);
-      return response;
+      const response = await this.service.get(`/Category/categories`);
+      return response.data;
     } catch {
       return [];
     }

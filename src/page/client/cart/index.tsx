@@ -8,7 +8,26 @@ import "./index.scss";
 import { ButtonCustom } from "component/button";
 import DiscountIcon from "@mui/icons-material/Discount";
 import { getFormatCurrencyVND } from "Utils/Image";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { CartService } from "api/Cart";
+import { useNavigate } from "react-router-dom";
 export const Cart = () => {
+  const userId = useSelector((state: any) => state.auth.userId);
+  const navigate = useNavigate();
+  const [cart, setCart] = useState<any>(undefined);
+
+  const getCart = async () => {
+    const res = await CartService.getCart(userId);
+    setCart(res);
+  };
+  useEffect(() => {
+    getCart();
+  }, []);
+
+  const onCheckout = () => {
+    navigate("/checkout");
+  };
   return (
     <>
       <div className="bg-bgGray">
@@ -93,7 +112,7 @@ export const Cart = () => {
                   Chọn Mã Voucher
                 </ButtonCustom>
               </div>
-              <ButtonCustom fontWeight={500} fontSize={14}>
+              <ButtonCustom fontWeight={500} fontSize={14} onClick={() => onCheckout()}>
                 <div>
                   <div>Thanh toán</div>
                   <div style={{ marginTop: "-4px" }}>{getFormatCurrencyVND(1000)}</div>
