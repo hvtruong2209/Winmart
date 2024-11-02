@@ -8,6 +8,7 @@ import { Message } from "model";
 import CloseIcon from "@mui/icons-material/Close";
 import { useLocation } from "react-router-dom";
 import InsertCommentIcon from "@mui/icons-material/InsertComment";
+import { getMessage, joinRoom, leaveRoom } from "Utils/hubHandler";
 
 export const ChatClient = (props: any) => {
   const listMessage = useRef<Message[]>([]);
@@ -31,7 +32,8 @@ export const ChatClient = (props: any) => {
   const onSendMessage = async () => {
     await ChatService.sendMessage({
       content: content,
-      roomId: localStorage.getItem("roomId") || "",
+      conservationId: localStorage.getItem("roomId") || "",
+      userId: localStorage.getItem("userId") || "",
     });
     setContent("");
   };
@@ -47,30 +49,35 @@ export const ChatClient = (props: any) => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    const newConnection = new signalR.HubConnectionBuilder()
-      .withUrl("https://localhost:44360/chatHub")
-      .configureLogging(signalR.LogLevel.Information)
-      .build();
-    newConnection
-      .start()
-      .then(() => {
-        console.log("Success connect!");
-      })
-      .catch(() => console.error("Error connect!"));
-    // newConnection.invoke("SetUserId", localStorage.getItem("userId"));
-
-    newConnection.on("newMessage", (messageView: Message) => {
-      setMessages([...listMessage.current, messageView]);
-      listMessage.current = [...listMessage.current, messageView];
-    });
-
-    return () => {
-      if (newConnection) {
-        newConnection.stop();
-      }
-    };
+    // console.log("message", getMessage());
   }, []);
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("accessToken");
+  //   const newConnection = new signalR.HubConnectionBuilder()
+  //     .withUrl("https://localhost:44360/chatHub")
+  //     .configureLogging(signalR.LogLevel.Information)
+  //     .build();
+  //   newConnection
+  //     .start()
+  //     .then(() => {
+  //       console.log("Success connect!");
+  //     })
+  //     .catch(() => console.error("Error connect!"));
+
+  //   newConnection.on("newMessage", (messageView: Message) => {
+  //     setMessages([...listMessage.current, messageView]);
+  //     listMessage.current = [...listMessage.current, messageView];
+  //   });
+
+  //   newConnection.invoke("Join", "", localStorage.getItem("userId"));
+
+  //   return () => {
+  //     if (newConnection) {
+  //       newConnection.stop();
+  //     }
+  //   };
+  // }, []);
 
   return (
     <>
@@ -79,7 +86,10 @@ export const ChatClient = (props: any) => {
           className="chat-round"
           onClick={() => {
             setIsOpenChat(true);
-            // navigate("/chat");
+            joinRoom(
+              localStorage.getItem("roomId"),
+              localStorage.getItem("userId")
+            );
           }}
         >
           <InsertCommentIcon style={{ color: "white" }} />
@@ -88,14 +98,22 @@ export const ChatClient = (props: any) => {
       {isOpenChat && (
         <div className="chat-client container-wrap flex flex-col bg-white">
           <div className="chat-header">
-            <CloseIcon onClick={() => setIsOpenChat(false)} />
+            <CloseIcon
+              onClick={() => {
+                setIsOpenChat(false);
+                leaveRoom(localStorage.getItem("roomId"));
+              }}
+            />
           </div>
           <div className="message-container">
             {messages?.map((item, index) => {
               if (item.userId === 1)
                 return (
                   <span className="mess-system" key={index}>
-                    <img alt="avatar" src={getUrlImage("avataradminchat.jpg")}></img>
+                    <img
+                      alt="avatar"
+                      src={getUrlImage("avataradminchat.jpg")}
+                    ></img>
                     <div className="text">
                       <div className="info">
                         {/* <span className="name">{item.name}</span> */}
@@ -140,7 +158,12 @@ export const ChatClient = (props: any) => {
                   onSendMessage();
                 }}
               />
-              <input type="file" id="uploadImageField" style={{ display: "none" }} onChange={handleFileChange} />
+              <input
+                type="file"
+                id="uploadImageField"
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+              />
             </div>
           </div>
         </div>

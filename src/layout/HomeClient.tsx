@@ -18,11 +18,26 @@ export const HomeClient = () => {
         <Route path="/register" element={<Register></Register>}></Route>
         <Route path="/login" element={<Login></Login>}></Route>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/products/:id" element={<ProductDetail></ProductDetail>}></Route>
-        <Route path="/cart" element={<PrivateClient element={<Cart />} />}></Route>
-        <Route path="/checkout" element={<PrivateClient element={<Payment />} />}></Route>
-        <Route path="/chat" element={<PrivateClient element={<ChatClient />} />}></Route>
-        <Route path="/customer/profile" element={<PrivateClient element={<InfoAccount />} />}></Route>
+        <Route
+          path="/products/:id"
+          element={<ProductDetail></ProductDetail>}
+        ></Route>
+        <Route
+          path="/cart"
+          element={<PrivateClient element={<Cart />} />}
+        ></Route>
+        <Route
+          path="/checkout"
+          element={<PrivateClient element={<Payment />} />}
+        ></Route>
+        <Route
+          path="/chat"
+          element={<PrivateClient element={<ChatClient />} />}
+        ></Route>
+        <Route
+          path="/customer/profile"
+          element={<PrivateClient element={<InfoAccount />} />}
+        ></Route>
       </Routes>
       {!!isAuth && <ChatClient />}
     </>

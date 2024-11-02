@@ -14,6 +14,8 @@ import { ICategory } from "model";
 import { LoginService } from "api/Login";
 import { useDispatch } from "react-redux";
 import { setIsAuth } from "../../redux/authSlice";
+import { connect } from "hubConnection";
+import { HubConnectionState } from "@microsoft/signalr";
 const options = [
   {
     id: 1,
@@ -78,8 +80,19 @@ export const ClientNav = () => {
     setCategories(res.length > 0 ? res : options);
   };
 
+  const onStartConnectedHub = async () => {
+    if (connect.state === HubConnectionState.Connected) return;
+    await connect
+      .start()
+      .then(() => {
+        console.log("Success connect!");
+      })
+      .catch(() => console.error("Error connect!"));
+  };
+
   useEffect(() => {
     getCategories();
+    onStartConnectedHub();
   }, []);
 
   return (
@@ -101,7 +114,8 @@ export const ClientNav = () => {
               navigate("/cart");
             }}
           >
-            <AddShoppingCartIcon style={{ color: "#fff" }} /> <span>Giỏ hàng</span>
+            <AddShoppingCartIcon style={{ color: "#fff" }} />{" "}
+            <span>Giỏ hàng</span>
             <div className="number-product">1</div>
           </div>
           <div
@@ -118,7 +132,8 @@ export const ClientNav = () => {
             }}
           >
             <div>
-              <AccountCircleIcon style={{ color: "#fff" }} /> <span>Hội viên</span>
+              <AccountCircleIcon style={{ color: "#fff" }} />{" "}
+              <span>Hội viên</span>
             </div>
             {isOpenProfile && !!isAuth && (
               <div className="nav-avatar-menu">
@@ -178,7 +193,9 @@ export const ClientNav = () => {
                       onMouseLeave={() => openSubMenu(false)}
                     >
                       <div>{el.name}</div>
-                      {el?.categories && el?.categories?.length > 0 && <div style={{ fontSize: 12 }}>{`>`}</div>}
+                      {el?.categories && el?.categories?.length > 0 && (
+                        <div style={{ fontSize: 12 }}>{`>`}</div>
+                      )}
                     </div>
                   );
                 })}

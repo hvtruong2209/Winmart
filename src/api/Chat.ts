@@ -30,9 +30,13 @@ class Chat {
     }
   };
 
-  sendMessage = async (message: { content: string; roomId: string }) => {
+  sendMessage = async (message: {
+    content: string;
+    conservationId: string;
+    userId: string;
+  }) => {
     try {
-      await this.serviceChat.post("/messages", message);
+      await this.serviceChat.post("api/messages/sendMessage", message);
     } catch {}
   };
 
