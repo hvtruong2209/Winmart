@@ -18,7 +18,7 @@
     overflow-y: auto;
     height: calc(100% - 40px);
     padding: 14px;
-
+    scroll-behavior: smooth;
     .mess-system {
       display: flex;
       align-items: center;

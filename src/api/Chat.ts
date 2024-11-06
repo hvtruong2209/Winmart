@@ -5,7 +5,7 @@ class Chat {
   serviceChat: any;
   uploadService: any;
   constructor() {
-    this.serviceChat = AxiosAPI(false, "https://localhost:44360/");
+    this.serviceChat = AxiosAPI(false, "https://localhost:44360/api");
     this.service = AxiosAPI();
     this.uploadService = AxiosAPI(true);
   }
@@ -22,21 +22,17 @@ class Chat {
   getMessage = async (info: any) => {
     try {
       const response = await this.serviceChat.get(
-        `/messages/room/getmessagebyroomid/roomId=${info.roomId}/page=${info.page}`
+        `/messages/getMessagesByRoomId?roomId=${info.roomId}&page=${info.page}`
       );
-      return response;
+      return response.data;
     } catch {
       return [];
     }
   };
 
-  sendMessage = async (message: {
-    content: string;
-    conservationId: string;
-    userId: string;
-  }) => {
+  sendMessage = async (message: { content: string; conservationId: string; userId: string }) => {
     try {
-      await this.serviceChat.post("api/messages/sendMessage", message);
+      await this.serviceChat.post("/messages/sendMessage", message);
     } catch {}
   };
 

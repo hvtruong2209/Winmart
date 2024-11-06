@@ -4,25 +4,18 @@ import { PlayArrow, Image } from "@mui/icons-material";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChatService } from "api/Chat";
 import * as signalR from "@microsoft/signalr";
-import { Message } from "model";
 import CloseIcon from "@mui/icons-material/Close";
 import { useLocation } from "react-router-dom";
 import InsertCommentIcon from "@mui/icons-material/InsertComment";
-import { getMessage, joinRoom, leaveRoom } from "Utils/hubHandler";
 
 export const ChatClient = (props: any) => {
-  const listMessage = useRef<Message[]>([]);
+  const listMessage = useRef<any[]>([]);
+  const scrollRef = useRef<any>(null);
   const [isOpenChat, setIsOpenChat] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      content: "hellojdhdhf h jhdf hjdh f hfdhfjdhfjdhf ",
-      roomId: 1,
-      timestamp: "11111",
-    },
-  ]);
+  const [messages, setMessages] = useState<any[]>([]);
   const [content, setContent] = useState<string>("");
-  // const userId = localStorage.getItem("userId") || 1;
+  const userId = localStorage.getItem("userId");
+  const roomId = localStorage.getItem("roomId");
   const location = useLocation();
   const hiddenChat = useMemo(() => {
     const urlHidden = ["/login", "/register"];
@@ -48,36 +41,53 @@ export const ChatClient = (props: any) => {
     await ChatService.upload(formData);
   };
 
+  const getMess = async () => {
+    const response = await ChatService.getMessage({ roomId: localStorage.getItem("roomId"), page: 0 });
+    listMessage.current = [...(response.result || [])].reverse();
+    setMessages([...(response.result || [])].reverse());
+  };
+
   useEffect(() => {
-    // console.log("message", getMessage());
+    getMess();
   }, []);
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("accessToken");
-  //   const newConnection = new signalR.HubConnectionBuilder()
-  //     .withUrl("https://localhost:44360/chatHub")
-  //     .configureLogging(signalR.LogLevel.Information)
-  //     .build();
-  //   newConnection
-  //     .start()
-  //     .then(() => {
-  //       console.log("Success connect!");
-  //     })
-  //     .catch(() => console.error("Error connect!"));
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
 
-  //   newConnection.on("newMessage", (messageView: Message) => {
-  //     setMessages([...listMessage.current, messageView]);
-  //     listMessage.current = [...listMessage.current, messageView];
-  //   });
+  useEffect(() => {
+    const newConnection = new signalR.HubConnectionBuilder()
+      .withUrl("https://localhost:44360/chatHub")
+      .configureLogging(signalR.LogLevel.Information)
+      .build();
 
-  //   newConnection.invoke("Join", "", localStorage.getItem("userId"));
+    newConnection
+      .start()
+      .then(() => {
+        newConnection.on("roomreload", (messageView: any) => {
+          console.log("messageView", messageView);
+          if (roomId !== messageView.id) return;
+          const data = {
+            content: messageView.lastMessage,
+            convervationId: roomId,
+            fromUserId: messageView.userId,
+            timestamp: messageView.timestamp,
+            fromFullName: messageView.name,
+          };
+          setMessages([...listMessage.current, data]);
+          listMessage.current.push(data);
+        });
+      })
+      .catch((error) => {});
 
-  //   return () => {
-  //     if (newConnection) {
-  //       newConnection.stop();
-  //     }
-  //   };
-  // }, []);
+    return () => {
+      if (newConnection) {
+        newConnection.stop();
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -86,10 +96,6 @@ export const ChatClient = (props: any) => {
           className="chat-round"
           onClick={() => {
             setIsOpenChat(true);
-            joinRoom(
-              localStorage.getItem("roomId"),
-              localStorage.getItem("userId")
-            );
           }}
         >
           <InsertCommentIcon style={{ color: "white" }} />
@@ -101,19 +107,16 @@ export const ChatClient = (props: any) => {
             <CloseIcon
               onClick={() => {
                 setIsOpenChat(false);
-                leaveRoom(localStorage.getItem("roomId"));
+                // leaveRoom(localStorage.getItem("roomId"));
               }}
             />
           </div>
-          <div className="message-container">
-            {messages?.map((item, index) => {
-              if (item.userId === 1)
+          <div className="message-container" ref={scrollRef}>
+            {messages?.map((item: any, index) => {
+              if (item.fromUserId !== userId)
                 return (
                   <span className="mess-system" key={index}>
-                    <img
-                      alt="avatar"
-                      src={getUrlImage("avataradminchat.jpg")}
-                    ></img>
+                    <img alt="avatar" src={getUrlImage("avataradminchat.jpg")}></img>
                     <div className="text">
                       <div className="info">
                         {/* <span className="name">{item.name}</span> */}
@@ -158,12 +161,7 @@ export const ChatClient = (props: any) => {
                   onSendMessage();
                 }}
               />
-              <input
-                type="file"
-                id="uploadImageField"
-                style={{ display: "none" }}
-                onChange={handleFileChange}
-              />
+              <input type="file" id="uploadImageField" style={{ display: "none" }} onChange={handleFileChange} />
             </div>
           </div>
         </div>
