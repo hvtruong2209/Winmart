@@ -12,63 +12,27 @@ import { useNavigate } from "react-router-dom";
 import { CategoryService } from "api/Category";
 import { ICategory } from "model";
 import { LoginService } from "api/Login";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsAuth } from "../../redux/authSlice";
 import { connect } from "hubConnection";
 import { HubConnectionState } from "@microsoft/signalr";
-const options = [
-  {
-    id: 1,
-    name: "Giá siêu rẻ",
-  },
-  {
-    id: 2,
-    name: "Sản phẩm khuyến mãi",
-  },
-  {
-    id: 3,
-    name: "Uư đãi hội viên",
-  },
-  {
-    id: 4,
-    name: "Sữa các loại",
-  },
-  {
-    id: 5,
-    name: "Hoa quả",
-  },
-  {
-    id: 6,
-    name: "Rau củ trái cây",
-    categories: [
-      {
-        name: "Rau",
-      },
-      {
-        name: "Củ",
-      },
-      {
-        name: "Quả",
-      },
-    ],
-  },
-  {
-    id: 7,
-    name: "Bánh kẹo",
-  },
-  {
-    id: 8,
-    name: "Đồ uống có cồn",
-  },
-];
+import { CartService } from "api/Cart";
+import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+
 export const ClientNav = () => {
   const navigate = useNavigate();
+  const amountCart = useSelector((state: any) => state.cart.cartAmountProduct);
   const isAuth = localStorage.getItem("accessToken");
+  const userId = localStorage.getItem("userId") || "";
   const [optionsSubmenu, setOptionsSubmenu] = useState<any[]>([]);
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [isOpenProfile, setIsOpenProfile] = useState<boolean>(false);
+  const [cart, setCart] = useState<any>(undefined);
   const dispatch = useDispatch();
+  const [search, setSearch] = useState<string>("");
   const openSubMenu = (isOpen: boolean, item?: any) => {
     if (isOpen) {
       setOptionsSubmenu(item.categories);
@@ -77,7 +41,7 @@ export const ClientNav = () => {
 
   const getCategories = async () => {
     const res = await CategoryService.getCategory();
-    setCategories(res.length > 0 ? res : options);
+    setCategories(res);
   };
 
   const onStartConnectedHub = async () => {
@@ -93,7 +57,16 @@ export const ClientNav = () => {
   useEffect(() => {
     getCategories();
     onStartConnectedHub();
+    getCart();
   }, []);
+
+  useEffect(() => {
+    getCart();
+  }, [amountCart]);
+  const getCart = async () => {
+    const res = await CartService.getCart(userId);
+    setCart(res);
+  };
 
   return (
     <div className="clientnav">
@@ -106,7 +79,29 @@ export const ClientNav = () => {
             navigate("/");
           }}
         />
-        <input className="search-input" placeholder="Tìm kiếm" />
+        <div className="search-input-container">
+          <input
+            className="search-input"
+            placeholder="Tìm kiếm"
+            value={search}
+            onChange={(e: any) => {
+              setSearch(e.target.value);
+            }}
+            onKeyDown={(e: any) => {
+              if (e.key === "Enter") {
+                const params = new URLSearchParams({ keyword: search });
+                navigate(`/search?${params.toString()}`);
+              }
+            }}
+          />
+          <SearchOutlinedIcon
+            className="icon-search"
+            onClick={() => {
+              const params = new URLSearchParams({ keyword: search });
+              navigate(`/search?${params.toString()}`);
+            }}
+          />
+        </div>
         <div className="flex">
           <div
             className="nav-cart"
@@ -114,9 +109,8 @@ export const ClientNav = () => {
               navigate("/cart");
             }}
           >
-            <AddShoppingCartIcon style={{ color: "#fff" }} />{" "}
-            <span>Giỏ hàng</span>
-            <div className="number-product">1</div>
+            <AddShoppingCartIcon style={{ color: "#fff" }} /> <span>Giỏ hàng</span>
+            {cart?.length > 0 && <div className="number-product">{cart.length}</div>}
           </div>
           <div
             className="nav-avatar"
@@ -132,8 +126,7 @@ export const ClientNav = () => {
             }}
           >
             <div>
-              <AccountCircleIcon style={{ color: "#fff" }} />{" "}
-              <span>Hội viên</span>
+              <AccountCircleIcon style={{ color: "#fff" }} /> <span>Hội viên</span>
             </div>
             {isOpenProfile && !!isAuth && (
               <div className="nav-avatar-menu">
@@ -149,7 +142,7 @@ export const ClientNav = () => {
                     navigate("/customer/profile");
                   }}
                 >
-                  Thông tin
+                  <PersonOutlinedIcon className="icon-menuu" /> Thông tin
                 </div>
                 <div
                   className="nav-avatar-menu-item"
@@ -158,11 +151,10 @@ export const ClientNav = () => {
                       dispatch(setIsAuth(false));
                     });
                     navigate("/");
-
-                    window.location.reload();
+                    // window.location.reload();
                   }}
                 >
-                  Đăng xuất
+                  <ExitToAppOutlinedIcon className="icon-menuu" /> Đăng xuất
                 </div>
               </div>
             )}
@@ -182,36 +174,42 @@ export const ClientNav = () => {
               <span>Danh mục sản phẩm</span>
             </Button>
 
-            {isOpenMenu && (
-              <div className="menu">
-                {categories?.map((el, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="flex justify-between menu-item"
-                      onMouseEnter={() => openSubMenu(true, el)}
-                      onMouseLeave={() => openSubMenu(false)}
-                    >
-                      <div>{el.name}</div>
-                      {el?.categories && el?.categories?.length > 0 && (
-                        <div style={{ fontSize: 12 }}>{`>`}</div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-            {isOpenMenu && optionsSubmenu?.length > 0 && (
-              <div className="sub-menu">
-                {optionsSubmenu?.map((el, index) => {
-                  return (
-                    <div key={index} className="flex justify-between menu-item">
-                      <div>{el?.name}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+            <div className="menu-container">
+              {isOpenMenu && (
+                <div className="menu">
+                  {categories?.map((el, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="flex justify-between menu-item"
+                        onMouseEnter={() => openSubMenu(true, el)}
+                        onMouseLeave={() => openSubMenu(false)}
+                      >
+                        <div>{el.name}</div>
+                        {el?.categories && el?.categories?.length > 0 && <div style={{ fontSize: 12 }}>{`>`}</div>}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+              {isOpenMenu && optionsSubmenu?.length > 0 && (
+                <div className="sub-menu">
+                  {optionsSubmenu?.map((el, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="flex justify-between menu-item"
+                        onClick={() => {
+                          navigate(`/category/${el.id}`);
+                        }}
+                      >
+                        <div>{el?.name}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
           <div className="right">
             <div>

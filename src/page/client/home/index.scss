@@ -17,6 +17,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 8px;
+  margin-top: 10px;
+  margin-bottom: 20px;
   .product {
     background-color: #fff;
     display: flex;

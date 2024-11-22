@@ -4,6 +4,7 @@ export const ButtonCustom = (props: any) => {
   return props.type === "secondary" ? (
     <Button
       {...props}
+      disabled={props?.isDisabled}
       sx={{
         fontSize: props.fontSize ? props.fontSize : "14px",
         width: props.width ? props.width : "100%",
@@ -23,6 +24,7 @@ export const ButtonCustom = (props: any) => {
   ) : (
     <Button
       {...props}
+      disabled={props?.isDisabled}
       sx={{
         fontSize: props.fontSize ? props.fontSize : "14px",
         width: props.width ? props.width : "100%",

@@ -4,8 +4,52 @@ import { ClientNav } from "component/clientnav";
 import "./index.scss";
 import { ListProduct } from "component/listproduct";
 import { Footer } from "component/footer";
-import { getUrlImage } from "Utils";
+import { getUnitProduct, getUrlImage } from "Utils";
+import { useParams } from "react-router-dom";
+import { CartService } from "api/Cart";
+import { showToast } from "../../../redux/toastSlice";
+import { useDispatch } from "react-redux";
+import { onCartChange } from "../../../redux/cartSlice";
+import { ProductService } from "api/Product";
+import { useEffect, useState } from "react";
+import { AnyCnameRecord } from "dns";
+import { getFormatCurrencyVND } from "Utils/Image";
+
 export const ProductDetail = () => {
+  const { id } = useParams();
+  const userId = localStorage.getItem("userId");
+  const dispatch = useDispatch();
+  const [detail, setDetail] = useState<any>(undefined);
+  const addProductToCart = async () => {
+    if (!!userId && !!id) {
+      const response = await CartService.addProduct({
+        userId: userId,
+        productId: id,
+        quantity: 1,
+      });
+      if (response) {
+        dispatch(showToast({ open: true, type: "success", text: "Đã thêm vào giỏ hàng." }));
+        dispatch(onCartChange());
+      } else {
+        dispatch(showToast({ open: true, type: "error", text: "Thêm thất bại!" }));
+      }
+    }
+  };
+  const getDetail = async (id: string) => {
+    const res = await ProductService.getDetailProduct(id);
+    setDetail(res);
+  };
+
+  useEffect(() => {
+    if (!!id) {
+      getDetail(id);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="bg-bgGray">
       <ClientNav />
@@ -16,35 +60,39 @@ export const ProductDetail = () => {
               <img alt="none" src="https://hcm.fstorage.vn/images/2024/02/333-20240201020407.png"></img>
             </div>
             <div className="right-detail flex-1">
-              <h2>O'LALA Xúc xích Xông khói 180g_MML</h2>
-              <h5 className="mb-2">SKU: 10184362</h5>
+              <h2>{detail?.name}</h2>
+              <h5 className="mb-2">SKU: {detail?.id?.slice(0, 7)}</h5>
               <div className="price">
                 <div className="flex item">
                   <div className="item-left">Giá bán lẻ</div>
-                  <div className="item-right">34000</div>
+                  <div className="item-right">{getFormatCurrencyVND(detail?.price || 0)}</div>
                 </div>
                 <div className="flex item">
-                  <div className="item-left">Tình trạng</div>
-                  <div className="item-right">Còn hàng</div>
+                  <div className="item-left">Giá khuyến mại</div>
+                  <div className="item-right">{getFormatCurrencyVND(detail?.salesPrice || 0)}</div>
                 </div>
               </div>
               <div className="flex item">
-                <div className="item-left">Vận chuyển</div>
-                <div className="item-right">Miễn phí giao hàng cho đơn từ 300.000đ. Giao hàng trong 2 giờ.</div>
-              </div>
-              <div className="flex item">
-                <div className="item-left">Khuyến mại</div>
-                <div className="item-right">Mua 2 Gói được tặng 1</div>
-              </div>
-              <div className="flex item">
-                <div className="item-left">Chọn loại</div>
-                <div className="item-right">Mua 2 Gói được tặng 1</div>
+                <div className="item-left">Tình trạng</div>
+                <div className="item-right">{detail?.quantity > 0 ? "Còn hàng" : "Hết hàng"} </div>
               </div>
               <div className="flex item">
                 <div className="item-left">Số lượng</div>
-                <div className="item-right">1</div>
+                <div className="item-right">{detail?.quantity || 0}</div>
               </div>
-              <ButtonCustom width={220} fontSize={11}>
+              <div className="flex item">
+                <div className="item-left">Đơn vị tính</div>
+                <div className="item-right">{getUnitProduct(detail?.unit)}</div>
+              </div>
+              <ButtonCustom
+                width={220}
+                fontSize={11}
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  addProductToCart();
+                }}
+                isDisabled={detail?.quantity <= 0}
+              >
                 <AddShoppingCart style={{ color: "white" }} />
                 <span className="font-semibold">Thêm vào giỏ</span>
               </ButtonCustom>
@@ -82,17 +130,14 @@ export const ProductDetail = () => {
               <div className="detail-left">Xuất xứ</div>
               <div>Vietnam</div>
             </div>
-            <div className="detail-item">
-              <div className="detail-left">Thành phần</div>
-              <div>Nước, sữa bột, đường, chiết xuất từ mầm lúa mạch, vitamin và khoáng chất</div>
-            </div>
+
             <div className="detail-item">
               <div className="detail-left">Hướng Dẫn Sử Dụng</div>
               <div>Dùng trực tiếp</div>
             </div>
             <div className="detail-item">
               <div className="detail-left">Bảo Quản</div>
-              <div>Sữa uống Milo ít đường Nestle hộp 180ml</div>
+              <div>Nơi khô ráo</div>
             </div>
           </div>
         </div>

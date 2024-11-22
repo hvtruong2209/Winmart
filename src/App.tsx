@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { HomeClient } from "./layout/HomeClient";
 
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -17,7 +17,7 @@ function App() {
           <HomeClient />
         </BrowserRouter>
       </LocalizationProvider>
-      <Toast open={toastData.open} handleClose={toastData.handleClose} type={toastData.type} text={toastData.text} />
+      <Toast open={toastData.open} handleClose={toastData?.handleClose} type={toastData.type} text={toastData.text} />
     </div>
   );
 }

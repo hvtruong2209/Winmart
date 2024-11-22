@@ -44,6 +44,10 @@
         font-size: 12px;
         margin-bottom: 20px;
       }
+      .chose-box {
+        color: #ed1c24;
+        border: 1px solid #ed1c24;
+      }
     }
     .choose-time {
       display: flex;
@@ -89,6 +93,13 @@
       margin-top: 20px;
       font-size: 13px;
     }
+    .text-area-note {
+      height: 100px;
+      width: 380px;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 4px;
+      padding: 10px 12px;
+    }
     .MuiTextField-root {
       width: 400px;
     }
@@ -112,6 +123,37 @@
           color: #ed1c24;
         }
       }
+    }
+  }
+  .select-address {
+    .MuiSelect-select {
+      padding: 10px 16px;
+      font-size: 14px;
+    }
+  }
+}
+
+.payment-success {
+  background-color: #e5e7eb;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .order-success {
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 30px 30px 40px 30px;
+    width: 700px;
+    h1 {
+      font-weight: 600;
+      font-size: 18px;
+    }
+    p {
+      margin-top: 20px;
     }
   }
 }

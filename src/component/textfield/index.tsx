@@ -4,6 +4,7 @@ export const TextInput = (props: any) => {
   return (
     <TextField
       {...props}
+      disabled={props.isDisabled}
       size="small"
       sx={{
         mt: 2,

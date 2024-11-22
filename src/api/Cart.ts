@@ -1,4 +1,4 @@
-import { ICartAddProduct, ICartAddQuantity, IRegisterUser } from "model";
+import { ICartAddProduct, ICartAddQuantity } from "model";
 import AxiosAPI from "./axios";
 
 class Cart {
@@ -10,15 +10,15 @@ class Cart {
   getCart = async (userId: string) => {
     try {
       const response = await this.service.get(`/Cart/getcart?currentUser=${userId}`);
-      return response;
+      return response.data.result || [];
     } catch {
       return [];
     }
   };
 
-  removeProduct = async (id: string) => {
+  removeProduct = async (id: string, userId: string) => {
     try {
-      const response = await this.service.delete(`/Cart/removeproduct?productId=${id}`);
+      const response = await this.service.delete(`/Cart/removeproduct?shoppingCartId=${id}&userId=${userId}`);
       return response;
     } catch {
       return [];
@@ -30,16 +30,16 @@ class Cart {
       const response = await this.service.post(`/Cart/addproduct`, product);
       return response;
     } catch {
-      return [];
+      return false;
     }
   };
 
-  removeAll = async (product: ICartAddProduct) => {
+  removeAll = async (userId: string) => {
     try {
-      const response = await this.service.delete(`/Cart/removeall`);
+      const response = await this.service.delete(`/Cart/removeall?userId=${userId}`);
       return response;
     } catch {
-      return [];
+      return false;
     }
   };
 

@@ -47,6 +47,24 @@ class Login {
   loginGoogle = () => {
     return "https://localhost:44361/api/Auth/loginGoogle";
   };
+
+  getProfile = async (userId: string) => {
+    try {
+      const response = await this.service.post(`/auth/getProfile?id=${userId}`);
+      return response.data;
+    } catch (e: any) {
+      return e.response.data;
+    }
+  };
+
+  updateProfile = async (body: any) => {
+    try {
+      const response = await this.service.post(`/auth/updateProfile`, body);
+      return response.data;
+    } catch (e: any) {
+      return e.response.data;
+    }
+  };
 }
 
 export const LoginService = new Login();

@@ -7,12 +7,30 @@ class Product {
     this.service = AxiosAPI();
   }
 
-  getProducts = async () => {
+  getProducts = async (body: any) => {
     try {
-      const response = await this.service.get(`/product/getProducts`);
+      const response = await this.service.post(`/product/getProducts`, body);
       return response;
     } catch {
       return [];
+    }
+  };
+
+  getDetailProduct = async (id: string) => {
+    try {
+      const response = await this.service.get(`/product/detail?productId=${id}`);
+      return response.data;
+    } catch {
+      return null;
+    }
+  };
+
+  getProductByCate = async (categoryId: string) => {
+    try {
+      const response = await this.service.post(`/product/getProductsByCategory?categoryId=${categoryId}`);
+      return response.data;
+    } catch {
+      return null;
     }
   };
 }

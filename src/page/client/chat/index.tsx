@@ -21,6 +21,7 @@ export const ChatClient = (props: any) => {
     const urlHidden = ["/login", "/register"];
     return !urlHidden.includes(location.pathname);
   }, [location]);
+  const [connection, setConnection] = useState<any>(null);
 
   const onSendMessage = async () => {
     await ChatService.sendMessage({
@@ -48,46 +49,58 @@ export const ChatClient = (props: any) => {
   };
 
   useEffect(() => {
-    getMess();
-  }, []);
-
-  useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
 
   useEffect(() => {
-    const newConnection = new signalR.HubConnectionBuilder()
+    getMess();
+    const connect = new signalR.HubConnectionBuilder()
       .withUrl("https://localhost:44360/chatHub")
-      .configureLogging(signalR.LogLevel.Information)
+      .withAutomaticReconnect()
       .build();
 
-    newConnection
+    connect.on("newMessage", (message) => {
+      console.log("newMessage", message);
+      setMessages([...listMessage.current, message]);
+      listMessage.current.push(message);
+    });
+
+    connect
       .start()
-      .then(() => {
-        newConnection.on("roomreload", (messageView: any) => {
-          console.log("messageView", messageView);
-          if (roomId !== messageView.id) return;
-          const data = {
-            content: messageView.lastMessage,
-            convervationId: roomId,
-            fromUserId: messageView.userId,
-            timestamp: messageView.timestamp,
-            fromFullName: messageView.name,
-          };
-          setMessages([...listMessage.current, data]);
-          listMessage.current.push(data);
-        });
-      })
-      .catch((error) => {});
+      .then(() => setConnection(connect))
+      .catch((err) => console.error("Connection failed: ", err));
 
     return () => {
-      if (newConnection) {
-        newConnection.stop();
-      }
+      connect.stop();
+      leaveRoom();
     };
   }, []);
+
+  const joinRoom = async () => {
+    if (connection) {
+      try {
+        await connection.invoke("join", roomId, userId);
+        console.log("join", roomId, userId);
+        // setMessages((prevMessages) => [...prevMessages, `You joined room ${roomName}`]);
+      } catch (err) {
+        console.error("Join room failed: ", err);
+      }
+    }
+  };
+
+  const leaveRoom = async () => {
+    if (connection) {
+      try {
+        await connection.invoke("leave", roomId);
+        console.log("leave");
+        // setMessages((prevMessages) => [...prevMessages, `You left room ${roomName}`]);
+      } catch (err) {
+        console.error("Leave room failed: ", err);
+      }
+    }
+  };
 
   return (
     <>
@@ -95,6 +108,7 @@ export const ChatClient = (props: any) => {
         <div
           className="chat-round"
           onClick={() => {
+            joinRoom();
             setIsOpenChat(true);
           }}
         >
@@ -106,6 +120,7 @@ export const ChatClient = (props: any) => {
           <div className="chat-header">
             <CloseIcon
               onClick={() => {
+                leaveRoom();
                 setIsOpenChat(false);
                 // leaveRoom(localStorage.getItem("roomId"));
               }}

@@ -60,7 +60,7 @@
     .nav-avatar-menu {
       position: absolute;
       right: 18px;
-      width: 120px;
+      width: 180px;
       font-size: 13px;
       .nav-avatar-menu-item-head {
         height: 30px;
@@ -69,25 +69,42 @@
       .nav-avatar-menu-item {
         background-color: #f8f9fa;
         padding: 10px;
+        display: flex;
+        align-items: center;
+        .icon-menuu {
+          display: inline-block;
+          margin-right: 10px;
+        }
         &:hover {
           color: #ed1c24;
+          background-color: rgb(241, 241, 241);
         }
       }
     }
   }
-  .search-input {
-    align-items: center;
-    border-radius: 20px;
-    padding: 0px 16px;
-    overflow: hidden;
+  .search-input-container {
     width: 100%;
     max-width: 400px;
-    color: rgb(51, 51, 51);
-    background-color: rgb(247, 247, 247);
-    border: 1px solid rgb(241, 241, 241);
-    outline: none;
-    height: 40px;
-    font-size: 13px;
+    position: relative;
+    .search-input {
+      align-items: center;
+      border-radius: 20px;
+      padding: 0px 16px;
+      overflow: hidden;
+      color: rgb(51, 51, 51);
+      width: 100%;
+      background-color: rgb(247, 247, 247);
+      border: 1px solid rgb(241, 241, 241);
+      outline: none;
+      height: 40px;
+      font-size: 13px;
+    }
+    .icon-search {
+      position: absolute;
+      right: 14px;
+      top: 8px;
+      cursor: pointer;
+    }
   }
 }
 
@@ -125,37 +142,39 @@
 .container-menu {
   position: relative;
 
-  .menu {
-    position: absolute;
-    top: 0px;
-    left: 8px;
-    background-color: #fff;
-    width: 200px;
-    font-weight: 600;
-    font-size: 13px;
-    z-index: 100;
-    .menu-item {
-      padding: 8px 10px;
-      cursor: pointer;
+  .menu-container {
+    .menu {
+      position: absolute;
+      top: 0px;
+      left: 8px;
+      background-color: #fff;
+      width: 200px;
+      font-weight: 600;
+      font-size: 13px;
+      // height: 284px;
+      z-index: 100;
+      .menu-item {
+        padding: 8px 10px;
+        cursor: pointer;
+      }
+      .menu-item:hover {
+        background-color: #ed1c24;
+        color: #fff;
+      }
     }
-    .menu-item:hover {
-      background-color: #ed1c24;
-      color: #fff;
-    }
-  }
-  .sub-menu {
-    position: absolute;
-    top: 0px;
-    left: 208px;
-    background-color: #fff;
-    width: 900px;
-    font-weight: 600;
-    font-size: 13px;
-    height: 284px;
-    z-index: 200;
-    width: 1012px;
-    .menu-item {
-      padding: 8px 10px;
+    .sub-menu {
+      position: absolute;
+      top: 0px;
+      left: 208px;
+      background-color: #fff;
+      // width: 900px;
+      font-weight: 600;
+      font-size: 13px;
+      z-index: 200;
+      width: 1012px;
+      .menu-item {
+        padding: 8px 10px;
+      }
     }
   }
 }
