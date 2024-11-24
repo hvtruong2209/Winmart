@@ -35,7 +35,7 @@ export const ClientNav = () => {
   const [search, setSearch] = useState<string>("");
   const openSubMenu = (isOpen: boolean, item?: any) => {
     if (isOpen) {
-      setOptionsSubmenu(item.categories);
+      setOptionsSubmenu([{name: '222', id:'1'}]);
     }
   };
 
@@ -201,12 +201,12 @@ export const ClientNav = () => {
                     return (
                       <div
                         key={index}
-                        className="flex justify-between menu-item"
+                        className="flex justify-between menu-item cursor-pointer "
                         onClick={() => {
                           navigate(`/category/${el.id}`);
                         }}
                       >
-                        <div>{el?.name}</div>
+                        <div className="cursor-pointer">{el?.name}</div>
                       </div>
                     );
                   })}
