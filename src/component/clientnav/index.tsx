@@ -79,7 +79,9 @@ export const ClientNav = () => {
             navigate("/");
           }}
         /> */}
-        <div className="text-logo">SHmarket</div>
+        <div className="text-logo" onClick={() => {
+            navigate("/");
+          }}>SHmarket</div>
         <div className="search-input-container">
           <input
             className="search-input"
