@@ -71,14 +71,15 @@ export const ClientNav = () => {
   return (
     <div className="clientnav">
       <div className="wrap-container main-container">
-        <img
+        {/* <img
           src={getUrlImage("logowhite.svg")}
           style={{ width: 190 }}
           alt="logo"
           onClick={() => {
             navigate("/");
           }}
-        />
+        /> */}
+        <div className="text-logo">SHmarket</div>
         <div className="search-input-container">
           <input
             className="search-input"
@@ -213,7 +214,7 @@ export const ClientNav = () => {
           </div>
           <div className="right">
             <div>
-              <MailOutline /> <span>Tin tức WinMart</span>
+              <MailOutline /> <span>Tin tức SHmarket</span>
             </div>
             <div>
               <HeadsetMic />

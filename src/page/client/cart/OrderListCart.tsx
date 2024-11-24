@@ -74,7 +74,6 @@ export const OrderListCart = (props: IOrderListCart) => {
                     <span className="text-overflow w-[220px]">Thời gian: {convertDateTime(order?.modifiedTime)}</span>
                     <div className="flex-1">Địa chỉ: {order?.customerAddress}</div>
                     <div style={{ fontWeight: 600, textAlign: "right" }} className="text-overflow w-[100px]">
-                      {" "}
                       {getFormatCurrencyVND(order?.total || 0)}
                     </div>
                   </AccordionSummary>

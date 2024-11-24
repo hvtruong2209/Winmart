@@ -1,11 +1,12 @@
-import { getUrlImage } from "Utils";
+import "./index.scss"
 
 export const Footer = () => {
   return (
     <div className="flex flex-col items-center py-10" style={{ backgroundColor: "#2c2c2c" }}>
       <div className="container-wrap flex text-white text-xs gap-2 justify-between">
         <div className="flex flex-col gap-2" style={{ width: 500 }}>
-          <img src={getUrlImage("logowhite.svg")} alt="Logo" style={{ width: 150, height: 45 }} />
+          {/* <img src={getUrlImage("logowhite.svg")} alt="Logo" style={{ width: 150, height: 45 }} /> */}
+          <div className="text-logo mb-5">SHmarket</div>
           <div>Công Ty Cổ Phần Dịch Vụ Thương Mại Tổng Hợp WinCommerce</div>
           <div>
             Mã số doanh nghiệp: 0104918404 Đăng ký lần đầu ngày 20 tháng 09 năm 2010, đăng ký thay đổi lần thứ 48, ngày
@@ -14,7 +15,7 @@ export const Footer = () => {
         </div>
         <div className="flex flex-col gap-2">
           <h5>Về chúng tôi</h5>
-          <a>Giới thiệu về WinMart</a>
+          <a>Giới thiệu về SHmarket</a>
           <a>Danh sách cửa hàng</a>
           <a>Quản lý chất lượng</a>
           <a>Chính sách bảo mật</a>
@@ -31,7 +32,7 @@ export const Footer = () => {
         <div className="flex flex-col gap-2">
           <h5>Chăm sóc khách hàng</h5>
           <a>Mua online: 0247 1066866</a>
-          <a>Email: cskh@winmart.massagroup.com</a>
+          <a>Email: cskh@shmarket.massagroup.com</a>
           <h5>Kết nối với chúng tôi</h5>
           <a>Đánh giá góp ý</a>
           <a>Danh sách trúng thưởng</a>

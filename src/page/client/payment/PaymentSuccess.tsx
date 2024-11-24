@@ -38,7 +38,7 @@ export const PaymentSuccess = () => {
           {`Bạn đã đặt hàng thành công đơn hàng trị giá 300.000 VND.
           Sau khi Shop xác nhận đơn hàng, sản phẩm sẽ được giao đến địa chỉ H6 Hồ Chí Minh Hồ Chí Minh tại Dự kiến hiện tại Thứ năm 6 (23/04/2021). 
           Bạn có thể theo dõi đơn hàng tại mục Thông tin tài khoản > Theo dõi đơn hàng hoặc nhấp vào mục Chi tiết đơn hàng bên dưới.
-          Winmart rất vui được phục vụ bạn!`}
+          SHmarket rất vui được phục vụ bạn!`}
         </p>
         <div style={{ marginTop: 20 }}>
           <Button

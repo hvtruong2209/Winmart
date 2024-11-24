@@ -109,7 +109,7 @@ export const Cart = () => {
                   return (
                     <div className="cart-item" key={index}>
                       <div className="flex flex-col items-center">
-                        <img src={getUrlImage("delivery.jpg")} alt="none"></img>
+                        <img src={product?.items?.imageUrl} alt="none"></img>
                         <div className="flex flex-col">
                           <div>{product?.items?.name}</div>
                           <div>DVT: {getUnitProduct(product?.items?.unit)}</div>
