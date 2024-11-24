@@ -46,10 +46,18 @@ export const SearchPageProduct = () => {
         quantity: 1,
       });
       if (response) {
-        dispatch(showToast({ open: true, type: "success", text: "Đã thêm vào giỏ hàng." }));
+        dispatch(
+          showToast({
+            open: true,
+            type: "success",
+            text: "Đã thêm vào giỏ hàng.",
+          })
+        );
         dispatch(onCartChange());
       } else {
-        dispatch(showToast({ open: true, type: "error", text: "Thêm thất bại!" }));
+        dispatch(
+          showToast({ open: true, type: "error", text: "Thêm thất bại!" })
+        );
       }
     }
   };
@@ -68,7 +76,9 @@ export const SearchPageProduct = () => {
           ) : products.length <= 0 ? (
             <div className="w-full flex justify-centerpt-10 pb-10 by-white mt-10">
               <div className="empty-cart flex flex-col items-center">
-                <InventoryIcon style={{ color: "red", height: 100, width: 100 }} />
+                <InventoryIcon
+                  style={{ color: "red", height: 100, width: 100 }}
+                />
                 <div className="mt-5 mb-5">Không tìm thấy sản phẩm nào.</div>
               </div>
             </div>
@@ -77,19 +87,27 @@ export const SearchPageProduct = () => {
               {products.map((product: any, index) => {
                 return (
                   <>
-                    <div className="product" key={index} onClick={() => navigate(`/products/${product.id}`)}>
+                    <div
+                      className="product"
+                      key={index}
+                      onClick={() => navigate(`/products/${product.id}`)}
+                    >
                       <div className="product-img">
-                        <img
-                          src="https://hcm.fstorage.vn/images/2022/68031db6-9a93-4181-8700-7778326e90b6_20210908041149-og.png"
-                          alt="prod"
-                        ></img>
+                        <img src={product.imgUrl} alt="prod"></img>
                       </div>
                       <div className="w-full">{product.name}</div>
-                      <div className="w-full mt-1">ĐVT: {getUnitProduct(product.unit)}</div>
-                      <div className="w-full text-red mt-1 font-semibold">{getFormatCurrencyVND(product.price)}</div>
+                      <div className="w-full mt-1">
+                        ĐVT: {getUnitProduct(product.unit)}
+                      </div>
+                      <div className="w-full text-red mt-1 font-semibold">
+                        {getFormatCurrencyVND(product.price)}
+                      </div>
                       <ButtonCustom
                         type="secondary"
-                        style={{ boxShadow: "rgba(153, 153, 153, 0.6) 0px 0px 5px", ZIndex: 5 }}
+                        style={{
+                          boxShadow: "rgba(153, 153, 153, 0.6) 0px 0px 5px",
+                          ZIndex: 5,
+                        }}
                         onClick={(e: any) => {
                           e.stopPropagation();
                           addProductToCart(product.id);

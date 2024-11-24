@@ -1,7 +1,7 @@
 import { Accordion, AccordionDetails, AccordionSummary, CircularProgress } from "@mui/material";
 import { OrderService } from "api/Order";
 import { useEffect, useState } from "react";
-import { getUrlImage } from "Utils";
+import { getUnitProduct, getUrlImage } from "Utils";
 import { getFormatCurrencyVND } from "Utils/Image";
 
 interface IOrderListCart {
@@ -60,11 +60,23 @@ export const OrderListCart = (props: IOrderListCart) => {
                     // expandIcon={<ExpandMoreIc />}
                     aria-controls="panel1-content"
                     id="panel1-header"
-                    style={{ width: "100%", display: "flex", justifyContent: "space-between" }}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      // justifyContent: "space-between",
+                    }}
                   >
-                    <div style={{ fontWeight: 600 }}>OrderId: {order?.id.slice(0, 7)}</div>
-                    <span>{convertDateTime(order?.modifiedTime)}</span>
-                    <div style={{ fontWeight: 600 }}> {getFormatCurrencyVND(order?.total || 0)}</div>
+                    {/* <div style={{ fontWeight: 600 }}>OrderId: {order?.id.slice(0, 7)}</div> */}
+                    <div className="text-overflow w-[100px]">{order?.customerName}</div>
+                    <div className="text-overflow w-[180px]">
+                      {order?.payMethod === 0 ? "Thanh toán COD" : "Thanh toán Online"}
+                    </div>
+                    <span className="text-overflow w-[220px]">Thời gian: {convertDateTime(order?.modifiedTime)}</span>
+                    <div className="flex-1">Địa chỉ: {order?.customerAddress}</div>
+                    <div style={{ fontWeight: 600, textAlign: "right" }} className="text-overflow w-[100px]">
+                      {" "}
+                      {getFormatCurrencyVND(order?.total || 0)}
+                    </div>
                   </AccordionSummary>
                   <AccordionDetails>
                     {order?.details.map((pro: any) => {
@@ -72,19 +84,27 @@ export const OrderListCart = (props: IOrderListCart) => {
                         <div
                           key={pro.productId}
                           className="mb-4"
-                          style={{ borderBottom: "1px solid rgb(247, 247, 247)" }}
+                          style={{
+                            borderBottom: "1px solid rgb(247, 247, 247)",
+                          }}
                         >
                           <div className="flex flex-col">
-                            <div style={{ fontWeight: 600, fontSize: 16, marginLeft: 20 }}>{pro?.productName}</div>
-                          </div>
-                          <div className="flex justify-between">
-                            <img src={getUrlImage("delivery.jpg")} alt="none" className="w-[80px]"></img>
-                            <div>
-                              <div>
-                                Số lượng: {pro?.quantity} {pro?.unit}
-                              </div>
-                              <div>Giá: {getFormatCurrencyVND(pro?.salesPrice || 0)}</div>
+                            <div
+                              style={{
+                                fontWeight: 600,
+                                fontSize: 16,
+                                marginLeft: 20,
+                              }}
+                            >
+                              {pro?.productName}
                             </div>
+                          </div>
+                          <div></div>
+                          <div className="flex justify-between pr-10 pl-10">
+                            <img src={pro?.imgUrl} alt="none" className="w-[80px]"></img>
+                            <div>Số lượng: {pro?.quantity}</div>
+                            <div>ĐVT: {getUnitProduct(pro?.unit)}</div>
+                            <div>{getFormatCurrencyVND(pro?.salesPrice || 0)}</div>
                           </div>
                         </div>
                       );

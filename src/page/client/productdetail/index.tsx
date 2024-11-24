@@ -14,18 +14,27 @@ import { ProductService } from "api/Product";
 import { useEffect, useState } from "react";
 import { AnyCnameRecord } from "dns";
 import { getFormatCurrencyVND } from "Utils/Image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
 
+// import "./styles.css";
+
+// import required modules
+import { Navigation } from "swiper/modules";
 export const ProductDetail = () => {
   const { id } = useParams();
   const userId = localStorage.getItem("userId");
   const dispatch = useDispatch();
   const [detail, setDetail] = useState<any>(undefined);
+  const [valueAmount, setValueAmount] = useState<number>(1);
+
   const addProductToCart = async () => {
     if (!!userId && !!id) {
       const response = await CartService.addProduct({
         userId: userId,
         productId: id,
-        quantity: 1,
+        quantity: valueAmount,
       });
       if (response) {
         dispatch(showToast({ open: true, type: "success", text: "Đã thêm vào giỏ hàng." }));
@@ -57,7 +66,31 @@ export const ProductDetail = () => {
         <div className="product-detail container-wrap flex flex-col  bg-white">
           <div className="flex">
             <div className="img">
-              <img alt="none" src="https://hcm.fstorage.vn/images/2024/02/333-20240201020407.png"></img>
+              {/* <img alt="none" src="https://hcm.fstorage.vn/images/2024/02/333-20240201020407.png"></img> */}
+              <Swiper
+                spaceBetween={50}
+                slidesPerView={1}
+                navigation
+                loop={true}
+                modules={[Navigation]}
+                onSwiper={(swiper: any) => console.log(swiper)}
+              >
+                {detail?.images?.map((el: any) => {
+                  return (
+                    <>
+                      <SwiperSlide key={el.id}>
+                        <img alt="none" src="https://hcm.fstorage.vn/images/2024/02/333-20240201020407.png"></img>
+                      </SwiperSlide>
+                      <SwiperSlide key={el.id}>
+                        <img alt="none" src="https://hcm.fstorage.vn/images/2024/02/333-20240201020407.png"></img>
+                      </SwiperSlide>
+                      <SwiperSlide key={el.id}>
+                        <img alt="none" src="https://hcm.fstorage.vn/images/2024/02/333-20240201020407.png"></img>
+                      </SwiperSlide>
+                    </>
+                  );
+                })}
+              </Swiper>
             </div>
             <div className="right-detail flex-1">
               <h2>{detail?.name}</h2>
@@ -76,13 +109,39 @@ export const ProductDetail = () => {
                 <div className="item-left">Tình trạng</div>
                 <div className="item-right">{detail?.quantity > 0 ? "Còn hàng" : "Hết hàng"} </div>
               </div>
+
               <div className="flex item">
-                <div className="item-left">Số lượng</div>
-                <div className="item-right">{detail?.quantity || 0}</div>
+                <div className="item-left">Chọn loại</div>
+                <div className="bg-red p-2 pr-4 pl-4 text-white">{getUnitProduct(detail?.unit).toUpperCase()}</div>
               </div>
               <div className="flex item">
-                <div className="item-left">Đơn vị tính</div>
-                <div className="item-right">{getUnitProduct(detail?.unit)}</div>
+                <div className="item-left">Số lượng</div>
+                <div className="item-right flex">
+                  <div
+                    className="w-[30px] h-[30px] mr-1 text-center"
+                    style={{ border: "1px solid #868e96", lineHeight: "28px", fontWeight: 600 }}
+                    onClick={() => {
+                      if (valueAmount > 1) setValueAmount(valueAmount - 1);
+                    }}
+                  >
+                    -
+                  </div>
+                  <div
+                    className="w-[30px] h-[30px] mr-1 text-center"
+                    style={{ border: "1px solid #868e96", lineHeight: "28px" }}
+                  >
+                    {valueAmount}
+                  </div>
+                  <div
+                    className="w-[30px] h-[30px] text-center"
+                    style={{ border: "1px solid #868e96", lineHeight: "28px", fontWeight: 600 }}
+                    onClick={() => {
+                      setValueAmount(valueAmount + 1);
+                    }}
+                  >
+                    +
+                  </div>
+                </div>
               </div>
               <ButtonCustom
                 width={220}
@@ -109,35 +168,23 @@ export const ProductDetail = () => {
       </div>
       <div className="flex justify-center part-detail-product">
         <div className="product-detail container-wrap flex  bg-white">
-          <div className="description">
-            Sữa uống Milo ít đường Nestle lốc 4 hộp x 180ml Được nghiên cứu và phát triển bởi Nestlé Thụy Sĩ – công ty
-            giải khát hàng đầu thế giới. Sản phẩm có hương vị thơm ngon, giúp trẻ bổ sung năng lượng và dưỡng chất mọi
-            lúc mọi nơi cho trẻ năng động và vươn xa. Sữa uống Milo ít đường Nestle lốc 4 hộp x 180ml với hợp chất
-            ACTIV-GO Vươn Xa là sự kết hợp độc đáo của PROTOMALT – chiết xuất từ mầm lúa mạch – và tổ hợp các vitamin
-            cùng khoáng chất thiết yếu, đóng vai trò quan trọng trong việc giải phóng năng lượng, tăng cường chức năng
-            cơ và hệ xương, hỗ trợ tích cực cho các hoạt động thể chất và não bộ của trẻ Hương vị MILO thơm ngon với sự
-            hòa quyện của cacao, sữa và lúa mạch nay đã có thêm lựa chọn ít đường phù hợp cho ý thích và khẩu vị đa dạng
-            của các bé Uống Nestlé MILO ít đường giúp bổ sung năng lượng và dưỡng chất thiết yếu, cho trẻ năng động mỗi
-            ngày. Sữa uống Milo ít đường Nestle lốc 4 hộp x 180ml sử dụng cho trẻ từ 6 tuổi trở lên với 2 khẩu phần
-            (180ml) MILO mỗi ngày. Sản phẩm được đóng hộp dễ dàng để trong túi xách balo đi học hay đi du lịch vô cùng
-            tiện lợi Cách bảo quản: Bảo quản sản phẩm nơi khô ráo, thoáng mát, tránh ánh nắng trực tiếp. Hạn sử dụng: 8
-            tháng kể từ ngày sản xuất Cách sử dụng: Lắc đều trước khi sử dụng. Ngon hơn khi uống lạnh Lưu ý: - Hạn sử
-            dụng thực tế quý khách vui lòng xem trên bao bì. - Hình sản phẩm chỉ mang tính chất minh họa, hình thực tế
-            bao bì của sản phẩm tùy thời điểm sẽ khác so với thực tế.
-          </div>
+          <div className="description">{detail?.descriptionProduct?.descriptions || "Không có mô tả!"}</div>
           <div className="detail">
             <div className="detail-item">
               <div className="detail-left">Xuất xứ</div>
-              <div>Vietnam</div>
+              {detail?.descriptionProduct?.origin || "-"}
             </div>
-
+            <div className="detail-item">
+              <div className="detail-left">Thành phần</div>
+              {detail?.descriptionProduct?.ingredients || "-"}
+            </div>
             <div className="detail-item">
               <div className="detail-left">Hướng Dẫn Sử Dụng</div>
-              <div>Dùng trực tiếp</div>
+              {detail?.descriptionProduct?.instructionsForUse || "-"}
             </div>
             <div className="detail-item">
               <div className="detail-left">Bảo Quản</div>
-              <div>Nơi khô ráo</div>
+              {detail?.descriptionProduct?.storage || "-"}
             </div>
           </div>
         </div>

@@ -41,7 +41,8 @@ export const InfoAccount = () => {
       email: res.email,
       gender: res.gender,
       phoneNumber: res.phoneNumber,
-      birthday: "0001-01-01T00:00:00" === res.birthday ? null : dayjs(res.birthday),
+      birthday:
+        "0001-01-01T00:00:00" === res.birthday ? null : dayjs(res.birthday),
     });
     originalProfile.current = res;
   };
@@ -49,8 +50,13 @@ export const InfoAccount = () => {
   const updateProfile = async () => {
     const request = {
       userId: userId,
-      firstName: profile.fullName.substring(0, profile.fullName.lastIndexOf(" ")),
-      lastName: profile.fullName.substring(profile.fullName.lastIndexOf(" ") + 1),
+      firstName: profile.fullName.substring(
+        0,
+        profile.fullName.lastIndexOf(" ")
+      ),
+      lastName: profile.fullName.substring(
+        profile.fullName.lastIndexOf(" ") + 1
+      ),
       phoneNumber: profile.phoneNumber,
       gender: profile.gender,
       birthday: profile.birthday,
@@ -61,9 +67,13 @@ export const InfoAccount = () => {
 
     const response = await LoginService.updateProfile(request);
     if (!!response) {
-      dispatch(showToast({ open: true, type: "success", text: "Cập nhập thành công!" }));
+      dispatch(
+        showToast({ open: true, type: "success", text: "Cập nhập thành công!" })
+      );
     } else {
-      dispatch(showToast({ open: true, type: "error", text: "Cập nhập thất bại!" }));
+      dispatch(
+        showToast({ open: true, type: "error", text: "Cập nhập thất bại!" })
+      );
     }
   };
 
@@ -102,7 +112,10 @@ export const InfoAccount = () => {
       <div className="bg-bgGray">
         <ClientNav />
         <div className="flex flex-col items-center mt-1 bg-bgGray">
-          <div className="advertisement flex justify-center" style={{ height: "100vh" }}>
+          <div
+            className="advertisement flex justify-center"
+            style={{ height: "100vh" }}
+          >
             <div className="container-wrap flex justify-center">
               <div className="profile">
                 <div className="title">Thông tin tài khoản</div>
@@ -125,7 +138,11 @@ export const InfoAccount = () => {
                   <div className="profile-item-left">
                     Email<span className="red">*</span>
                   </div>
-                  <TextInput className="profile-item-right" value={profile.Email} isDisabled={true}></TextInput>
+                  <TextInput
+                    className="profile-item-right"
+                    value={profile.email}
+                    isDisabled={true}
+                  ></TextInput>
                 </div>
                 <div className="profile-item">
                   <div className="profile-item-left">Số điện thoại</div>
@@ -206,7 +223,11 @@ export const InfoAccount = () => {
                       displayEmpty
                       inputProps={{ "aria-label": "Without label" }}
                       onChange={(e: any) => {
-                        setProfile({ ...profile, districtId: e.target.value, ward: "" });
+                        setProfile({
+                          ...profile,
+                          districtId: e.target.value,
+                          ward: "",
+                        });
                       }}
                       disabled={!profile.cityId}
                     >
@@ -243,7 +264,12 @@ export const InfoAccount = () => {
                   </FormControl>
                 </div>
                 <ButtonCustom
-                  style={{ width: 100, float: "right", marginTop: 30, marginRight: 10 }}
+                  style={{
+                    width: 100,
+                    float: "right",
+                    marginTop: 30,
+                    marginRight: 10,
+                  }}
                   onClick={() => updateProfile()}
                 >
                   Cập nhập

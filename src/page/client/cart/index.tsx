@@ -1,6 +1,6 @@
 import { ClientNav } from "component/clientnav";
 import { Footer } from "component/footer";
-import { getUrlImage } from "Utils";
+import { getUnitProduct, getUrlImage } from "Utils";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -59,7 +59,12 @@ export const Cart = () => {
     });
   };
 
-  const amountChange = async (productId: string, amount: number, quantity?: number, productCartId?: string) => {
+  const amountChange = async (
+    productId: string,
+    amount: number,
+    quantity?: number,
+    productCartId?: string
+  ) => {
     const res = await CartService.addProduct({
       productId: productId,
       quantity: amount,
@@ -107,12 +112,16 @@ export const Cart = () => {
                         <img src={getUrlImage("delivery.jpg")} alt="none"></img>
                         <div className="flex flex-col">
                           <div>{product?.items?.name}</div>
-                          <div>DVT: {product?.items?.unit}</div>
+                          <div>DVT: {getUnitProduct(product?.items?.unit)}</div>
                         </div>
                       </div>
                       <div className="flex flex-col justify-center">
-                        <span className="original-price">{getFormatCurrencyVND(product?.items?.price)}</span>
-                        <span style={{ color: "#ed1c24" }}>{getFormatCurrencyVND(product?.items?.salePrice || 0)}</span>
+                        <span className="original-price">
+                          {getFormatCurrencyVND(product?.items?.price)}
+                        </span>
+                        <span style={{ color: "#ed1c24" }}>
+                          {getFormatCurrencyVND(product?.items?.salePrice || 0)}
+                        </span>
                       </div>
                       <div className="flex items-center">
                         <div className="select-number">
@@ -121,11 +130,19 @@ export const Cart = () => {
                             style={{ color: "ed1c24", borderColor: "ed1c24" }}
                             aria-label="reduce"
                             onClick={() => {
-                              amountChange(product?.items?.id, -1, product?.quantity, product.id!);
+                              amountChange(
+                                product?.items?.id,
+                                -1,
+                                product?.quantity,
+                                product.id!
+                              );
                               // setCount(Math.max(count - 1, 0));
                             }}
                           >
-                            <RemoveIcon style={{ color: "ed1c24" }} fontSize="small" />
+                            <RemoveIcon
+                              style={{ color: "ed1c24" }}
+                              fontSize="small"
+                            />
                           </ButtonCustom>
                           <div className="number">{product?.quantity}</div>
                           <ButtonCustom
@@ -137,7 +154,10 @@ export const Cart = () => {
                               // setCount(count + 1);
                             }}
                           >
-                            <AddIcon style={{ color: "ed1c24" }} fontSize="small" />
+                            <AddIcon
+                              style={{ color: "ed1c24" }}
+                              fontSize="small"
+                            />
                           </ButtonCustom>
                         </div>
                         <CloseIcon
@@ -164,15 +184,21 @@ export const Cart = () => {
             <div className="cart-right">
               <div className="flex justify-between">
                 <span className="text">Tạm tính giỏ hàng:</span>
-                <span className="price">{getFormatCurrencyVND(infoCart.originalTotal)}</span>
+                <span className="price">
+                  {getFormatCurrencyVND(infoCart.originalTotal)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text">Tạm tính sản phẩm KM:</span>
-                <span className="price">{getFormatCurrencyVND(infoCart.priceTotal)}</span>
+                <span className="price">
+                  {getFormatCurrencyVND(infoCart.priceTotal)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text">Tiết kiệm được:</span>
-                <span className="price">{getFormatCurrencyVND(infoCart.saleTotal)}</span>
+                <span className="price">
+                  {getFormatCurrencyVND(infoCart.saleTotal)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text">Phí vận chuyển </span>
@@ -184,7 +210,9 @@ export const Cart = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text">Thành tiền:</span>
-                <span className="price">{getFormatCurrencyVND(infoCart.priceTotal)}</span>
+                <span className="price">
+                  {getFormatCurrencyVND(infoCart.priceTotal)}
+                </span>
               </div>
               <div className="text italic">(Giá đã bao gồm VAT)</div>
               <div className="text italic" style={{ color: "#ed1c24" }}>
@@ -205,7 +233,9 @@ export const Cart = () => {
               >
                 <div>
                   <div>Thanh toán</div>
-                  <div style={{ marginTop: "-4px" }}>{getFormatCurrencyVND(infoCart.priceTotal)}</div>
+                  <div style={{ marginTop: "-4px" }}>
+                    {getFormatCurrencyVND(infoCart.priceTotal)}
+                  </div>
                 </div>
               </ButtonCustom>
             </div>
@@ -258,7 +288,11 @@ export const Cart = () => {
               </div>
 
               <div
-                className={`${valueStatus === DeliveryStatus.ON_DELIVERY ? "status-select" : ""}`}
+                className={`${
+                  valueStatus === DeliveryStatus.ON_DELIVERY
+                    ? "status-select"
+                    : ""
+                }`}
                 onClick={() => {
                   setValueStatus(DeliveryStatus.ON_DELIVERY);
                 }}
@@ -266,7 +300,11 @@ export const Cart = () => {
                 Đang vận chuyển
               </div>
               <div
-                className={`${valueStatus === DeliveryStatus.DELIVERED ? "status-select" : ""}`}
+                className={`${
+                  valueStatus === DeliveryStatus.DELIVERED
+                    ? "status-select"
+                    : ""
+                }`}
                 onClick={() => {
                   setValueStatus(DeliveryStatus.DELIVERED);
                 }}
@@ -274,7 +312,11 @@ export const Cart = () => {
                 Hoàn thành
               </div>
               <div
-                className={`${valueStatus === DeliveryStatus.CANCELLED ? "status-select" : ""}`}
+                className={`${
+                  valueStatus === DeliveryStatus.CANCELLED
+                    ? "status-select"
+                    : ""
+                }`}
                 onClick={() => {
                   setValueStatus(DeliveryStatus.CANCELLED);
                 }}
@@ -286,9 +328,14 @@ export const Cart = () => {
         </div>
 
         <div className="flex justify-center items-center">
-          <div className="cart container-wrap flex bg-white">{renderStep()}</div>
+          <div className="cart container-wrap flex bg-white">
+            {renderStep()}
+          </div>
         </div>
-        <div className="flex justify-center bg-white mt-10" style={{ borderTop: "3px solid #d42333" }}>
+        <div
+          className="flex justify-center bg-white mt-10"
+          style={{ borderTop: "3px solid #d42333" }}
+        >
           <div className="container-wrap flex bg-white part-advertise">
             <div>
               <img src={getUrlImage("delivery.jpg")} alt="none"></img>
