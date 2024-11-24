@@ -77,17 +77,9 @@ export const ProductDetail = () => {
               >
                 {detail?.images?.map((el: any) => {
                   return (
-                    <>
                       <SwiperSlide key={el.id}>
-                        <img alt="none" src="https://hcm.fstorage.vn/images/2024/02/333-20240201020407.png"></img>
+                        <img alt="none" src={el.url}></img>
                       </SwiperSlide>
-                      <SwiperSlide key={el.id}>
-                        <img alt="none" src="https://hcm.fstorage.vn/images/2024/02/333-20240201020407.png"></img>
-                      </SwiperSlide>
-                      <SwiperSlide key={el.id}>
-                        <img alt="none" src="https://hcm.fstorage.vn/images/2024/02/333-20240201020407.png"></img>
-                      </SwiperSlide>
-                    </>
                   );
                 })}
               </Swiper>

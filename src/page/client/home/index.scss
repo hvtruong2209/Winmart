@@ -47,6 +47,9 @@
     .product-img {
       width: 190px;
       height: 190px;
+      img {
+        object-fit: cover;
+      }
     }
     .product-name,
     .product-unit {
