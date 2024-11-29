@@ -35,7 +35,7 @@ export const ClientNav = () => {
   const [search, setSearch] = useState<string>("");
   const openSubMenu = (isOpen: boolean, item?: any) => {
     if (isOpen) {
-      setOptionsSubmenu([{name: '222', id:'1'}]);
+      setOptionsSubmenu([...item.categories]);
     }
   };
 
@@ -79,9 +79,14 @@ export const ClientNav = () => {
             navigate("/");
           }}
         /> */}
-        <div className="text-logo" onClick={() => {
+        <div
+          className="text-logo"
+          onClick={() => {
             navigate("/");
-          }}>SHmarket</div>
+          }}
+        >
+          SHmarket
+        </div>
         <div className="search-input-container">
           <input
             className="search-input"
@@ -193,23 +198,23 @@ export const ClientNav = () => {
                       </div>
                     );
                   })}
-                </div>
-              )}
-              {isOpenMenu && optionsSubmenu?.length > 0 && (
-                <div className="sub-menu">
-                  {optionsSubmenu?.map((el, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className="flex justify-between menu-item cursor-pointer "
-                        onClick={() => {
-                          navigate(`/category/${el.id}`);
-                        }}
-                      >
-                        <div className="cursor-pointer">{el?.name}</div>
-                      </div>
-                    );
-                  })}
+                  {isOpenMenu && optionsSubmenu?.length > 0 && (
+                    <div className="sub-menu">
+                      {optionsSubmenu?.map((el, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className="flex justify-between menu-item cursor-pointer "
+                            onClick={() => {
+                              navigate(`/category/${el.id}`);
+                            }}
+                          >
+                            <div className="cursor-pointer">{el?.name}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
